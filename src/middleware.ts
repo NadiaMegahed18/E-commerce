@@ -16,7 +16,7 @@ export default async function middleware(req: NextRequest) {
 
   }
 
-  return NextResponse.redirect("/login")
+  return NextResponse.redirect("http://localhost:3000/login")
 
 }
 
