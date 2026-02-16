@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { getAllBrands } from '../_services/_action/brands.action'
+import { useRouter } from 'next/navigation'
 import { Loader2, X, Sparkles, AlertCircle } from 'lucide-react'
 import Image from 'next/image'
 
@@ -12,6 +13,7 @@ interface Brand {
 }
 
 export default function BrandsPage() {
+    const router = useRouter()
     const [brands, setBrands] = useState<Brand[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -128,51 +130,62 @@ export default function BrandsPage() {
                 </div>
             </div>
 
-            {/* Simple Compact Modal */}
+            {/* Premium Brand Modal */}
             {selectedBrand && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-fade-in"
                     onClick={closeModal}
                 >
                     <div
-                        className="relative bg-white rounded-3xl max-w-sm w-full shadow-2xl animate-scale-in overflow-hidden"
+                        className="relative bg-white rounded-[3rem] max-w-md w-full shadow-[0_50px_100px_rgba(0,0,0,0.2)] animate-scale-in overflow-hidden border border-white/20"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {/* Close Button */}
+                        {/* Decorative Background Elements */}
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50"></div>
+                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-emerald-100/30 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2 opacity-50"></div>
+
+                        {/* Close Icon Button */}
                         <button
                             onClick={closeModal}
-                            className="absolute top-4 right-4 z-10 bg-white/90 hover:bg-red-500 text-slate-600 hover:text-white p-2 rounded-full transition-all duration-300 hover:rotate-90 shadow-md"
+                            className="absolute top-6 right-6 z-20 bg-white/80 backdrop-blur-sm hover:bg-red-500 text-slate-400 hover:text-white p-2.5 rounded-2xl transition-all duration-300 hover:rotate-90 shadow-lg border border-slate-100/50 group/close"
+                            title="Close"
                         >
-                            <X size={18} />
+                            <X size={20} className="transition-transform group-active/close:scale-90" />
                         </button>
 
-                        {/* Compact Content */}
-                        <div className="p-8 text-center">
-                            {/* Small Brand Image */}
-                            <div className="relative w-20 h-20 mx-auto mb-4 bg-slate-50 rounded-xl shadow-sm overflow-hidden">
-                                <Image
-                                    src={selectedBrand.image}
-                                    fill
-                                    alt={selectedBrand.name}
-                                    className="object-contain p-2"
-                                />
+                        <div className="p-10 text-center relative z-10">
+                            {/* Premium Brand Image Container */}
+                            <div className="relative w-32 h-32 mx-auto mb-8 group">
+                                <div className="absolute inset-0 bg-emerald-50 rounded-[2.5rem] rotate-6 group-hover:rotate-12 transition-transform duration-500"></div>
+                                <div className="absolute inset-0 bg-white rounded-[2.5rem] shadow-xl border border-slate-50 flex items-center justify-center overflow-hidden p-6 relative">
+                                    <Image
+                                        src={selectedBrand.image}
+                                        fill
+                                        alt={selectedBrand.name}
+                                        className="object-contain p-4 group-hover:scale-110 transition-transform duration-700"
+                                    />
+                                </div>
                             </div>
 
-                            {/* Brand Name */}
-                            <h2 className="text-xl font-black text-slate-800 mb-1">
-                                {selectedBrand.name}
-                            </h2>
+                            {/* Brand Typography */}
+                            <div className="space-y-2 mb-10">
+                                <div className="flex items-center justify-center gap-2">
+                                    <span className="h-px w-8 bg-slate-100"></span>
+                                    <p className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.3em]">Official Brand</p>
+                                    <span className="h-px w-8 bg-slate-100"></span>
+                                </div>
+                                <h2 className="text-4xl font-[1000] text-slate-900 tracking-tighter">
+                                    {selectedBrand.name}<span className="text-emerald-500">.</span>
+                                </h2>
+                                <p className="text-slate-400 text-sm font-medium italic">Discover premium collection</p>
+                            </div>
 
-                            <p className="text-slate-400 text-xs font-medium mb-6">
-                                Premium Brand
-                            </p>
-
-                            {/* Single Action Button */}
+                            {/* Action Button */}
                             <button
                                 onClick={closeModal}
-                                className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-3 rounded-xl font-bold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                                className="w-full bg-slate-900 hover:bg-black text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all duration-300 shadow-2xl hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2"
                             >
-                                View Products
+                                Close Modal <X size={16} />
                             </button>
                         </div>
                     </div>

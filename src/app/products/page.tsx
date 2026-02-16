@@ -5,11 +5,16 @@ import { ProductType } from '../_types/product.type'
 import { Search, SlidersHorizontal, AlertCircle } from 'lucide-react'
 import ProductCard from '../_components/ProductCard/ProductCard'
 import PremiumLoader from '../_components/PremiumLoader/PremiumLoader'
+import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 
-export default function ProductsPage() {
+function ProductsContent() {
+    const searchParams = useSearchParams()
+    const brandParam = searchParams.get('brand')
+
     const [products, setProducts] = useState<ProductType[]>([])
     const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([])
-    const [searchTerm, setSearchTerm] = useState("")
+    const [searchTerm, setSearchTerm] = useState(brandParam || "")
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<boolean>(false)
 
@@ -40,7 +45,8 @@ export default function ProductsPage() {
     useEffect(() => {
         const filtered = products.filter(p =>
             p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            p.category.name.toLowerCase().includes(searchTerm.toLowerCase())
+            p.category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.brand.name.toLowerCase().includes(searchTerm.toLowerCase())
         )
         setFilteredProducts(filtered)
     }, [searchTerm, products])
@@ -142,5 +148,13 @@ export default function ProductsPage() {
                 )}
             </div>
         </div>
+    )
+}
+
+export default function ProductsPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#fcfcfb]"><PremiumLoader /></div>}>
+            <ProductsContent />
+        </Suspense>
     )
 }

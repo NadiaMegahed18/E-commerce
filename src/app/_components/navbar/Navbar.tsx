@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils' // You might need to create this or just use te
 
 export default function Navbar() {
   const { data: session } = useSession()
+  const [hasManualToken, setHasManualToken] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -22,9 +23,27 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Check for manual token
+  useEffect(() => {
+    const checkToken = () => {
+      const token = document.cookie.split('; ').find(row => row.startsWith('token-user='));
+      setHasManualToken(!!token);
+    };
+
+    checkToken();
+    // Listen for storage changes as a fallback for some cross-tab scenarios if needed
+    window.addEventListener('focus', checkToken);
+    return () => window.removeEventListener('focus', checkToken);
+  }, [])
+
   function handleLogout() {
+    // Clear the manual token cookie
+    document.cookie = "token-user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    setHasManualToken(false);
     signOut({ redirect: true, callbackUrl: "/login" })
   }
+
+  const isLoggedIn = !!session || hasManualToken;
 
   const navLinks = [
     { href: "/", label: "Home", icon: Home },
@@ -74,15 +93,17 @@ export default function Navbar() {
                 {/* Badge could go here */}
               </Link>
 
-              {session ? (
+              {isLoggedIn ? (
                 <div className="flex items-center gap-4 pl-4 border-l border-gray-200">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
-                      {session.user?.name?.[0]?.toUpperCase() || <User size={16} />}
+                      {session?.user?.name?.[0]?.toUpperCase() || <User size={16} />}
                     </div>
-                    <span className="text-sm font-semibold text-gray-700 max-w-[100px] truncate">
-                      {session.user?.name?.split(' ')[0]}
-                    </span>
+                    {session?.user?.name && (
+                      <span className="text-sm font-semibold text-gray-700 max-w-[100px] truncate">
+                        {session.user.name.split(' ')[0]}
+                      </span>
+                    )}
                   </div>
                   <button
                     onClick={handleLogout}
@@ -132,7 +153,7 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="h-px bg-gray-100 my-2"></div>
-            {session ? (
+            {isLoggedIn ? (
               <>
                 <Link href="/cart" className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-700 font-medium">
                   <ShoppingCart size={20} className="text-emerald-500" /> Cart
