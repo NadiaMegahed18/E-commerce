@@ -4,18 +4,20 @@ import { NextRequest, NextResponse } from 'next/server'
 export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // 1. Get JWT Token
+  // 1. Get Authentication Tokens
   const jwt = await getToken({
     req,
     secret: process.env.NEXTAUTH_SECRET
   });
+  const manualToken = req.cookies.get('token-user')?.value;
+  const isAuthenticated = !!jwt || !!manualToken;
 
   // 2. Define Auth Pages
   const isAuthPage = pathname === '/login' || pathname === '/signup' || pathname === '/forgot-password';
 
   // 3. Logic
   if (isAuthPage) {
-    if (jwt) {
+    if (isAuthenticated) {
       // If logged in, don't let them go to login/signup, redirect to home
       return NextResponse.redirect(new URL('/', req.url));
     }
@@ -23,12 +25,12 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // 4. Protection: redirect to login if not authenticated and trying to access a protected route
-  if (!jwt) {
-    const loginUrl = new URL('/login', req.url);
+  // 4. Protection: redirect to signup if not authenticated and trying to access a protected route
+  if (!isAuthenticated) {
+    const signupUrl = new URL('/signup', req.url);
     // Optional: save the current path to redirect back after login
-    // loginUrl.searchParams.set('callbackUrl', pathname);
-    return NextResponse.redirect(loginUrl);
+    // signupUrl.searchParams.set('callbackUrl', pathname);
+    return NextResponse.redirect(signupUrl);
   }
 
   return NextResponse.next();
