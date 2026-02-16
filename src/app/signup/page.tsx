@@ -41,51 +41,28 @@ export default function SignupPage() {
     <div className="min-h-screen h-screen flex items-center justify-center p-4 bg-[#fcfcfb] overflow-hidden">
       <div className="w-full max-w-5xl space-y-3 animate-in fade-in zoom-in-95 duration-700">
 
-        {/* Header Section - Wide & Visible */}
-        <div className="text-center space-y-1">
-          <Link href="/" className="inline-flex items-center gap-2 text-[#4A6B6B] hover:text-[#A67B5B] transition-all font-bold text-xs uppercase tracking-widest opacity-60">
-            <ArrowLeft size={14} /> Back to collections
-          </Link>
-          <h1 className="text-4xl md:text-5xl font-[1000] text-gray-900 tracking-tighter leading-none">
-            Join FreshCart<span className="text-[#A67B5B]">.</span>
+        {/* Header Section */}
+        <div className="text-left space-y-1 pl-2">
+          <h1 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-none lowercase">
+            register now
           </h1>
-          <p className="text-gray-400 font-bold uppercase tracking-[0.5em] text-[10px]">Premium Member Registration</p>
         </div>
 
-        {/* Form Card - Wide Vertical Stack */}
+        {/* Form Card */}
         <div className="bg-white p-8 md:p-10 rounded-[3rem] shadow-[0_40px_100px_rgba(74,107,107,0.05)] border border-gray-100/50">
-          <form onSubmit={form.handleSubmit(handleSignUp)} className="space-y-3.5">
+          <form onSubmit={form.handleSubmit(handleSignUp)} className="space-y-4">
 
-            <div className="grid grid-cols-1 gap-3.5 border-b border-gray-50 pb-4">
+            <div className="grid grid-cols-1 gap-4 border-b border-gray-50 pb-6">
               <Controller
                 name="name"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid} className="space-y-1">
-                    <FieldLabel htmlFor={field.name} className="font-black text-[13px] uppercase tracking-wider text-[#1a2e2e] ml-1">Full Name</FieldLabel>
+                    <FieldLabel htmlFor={field.name} className="font-medium text-sm text-gray-800 ml-1">Name :</FieldLabel>
                     <Input
                       {...field}
                       id={field.name}
-                      className="h-11 md:h-12 rounded-lg border-gray-100 focus:border-[#4A6B6B] focus:ring-2 focus:ring-[#4A6B6B]/5 bg-gray-50/20 transition-all font-medium text-base px-5"
-                      placeholder="Enter your name"
-                    />
-                    {fieldState.invalid && <p className="text-red-500 text-[10px] font-bold uppercase ml-1">{fieldState.error?.message}</p>}
-                  </Field>
-                )}
-              />
-
-              <Controller
-                name="phone"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="space-y-1">
-                    <FieldLabel htmlFor={field.name} className="font-black text-[13px] uppercase tracking-wider text-[#1a2e2e] ml-1">Phone Number</FieldLabel>
-                    <Input
-                      {...field}
-                      id={field.name}
-                      type='tel'
-                      className="h-11 md:h-12 rounded-lg border-gray-100 focus:border-[#4A6B6B] focus:ring-2 focus:ring-[#4A6B6B]/5 bg-gray-50/20 transition-all font-medium text-base px-5"
-                      placeholder="Your phone number"
+                      className="h-11 md:h-12 bg-transparent border-0 border-b border-gray-200 rounded-none focus:ring-0 focus:border-[#4A6B6B] transition-all font-medium text-base px-1 shadow-none"
                     />
                     {fieldState.invalid && <p className="text-red-500 text-[10px] font-bold uppercase ml-1">{fieldState.error?.message}</p>}
                   </Field>
@@ -97,13 +74,12 @@ export default function SignupPage() {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid} className="space-y-1">
-                    <FieldLabel htmlFor={field.name} className="font-black text-[13px] uppercase tracking-wider text-[#1a2e2e] ml-1">Email Address</FieldLabel>
+                    <FieldLabel htmlFor={field.name} className="font-medium text-sm text-gray-800 ml-1">Email :</FieldLabel>
                     <Input
                       {...field}
                       id={field.name}
                       type='email'
-                      className="h-11 md:h-12 rounded-lg border-gray-100 focus:border-[#4A6B6B] focus:ring-2 focus:ring-[#4A6B6B]/5 bg-gray-50/20 transition-all font-medium text-base px-5"
-                      placeholder="you@example.com"
+                      className="h-11 md:h-12 bg-transparent border-0 border-b border-gray-200 rounded-none focus:ring-0 focus:border-[#4A6B6B] transition-all font-medium text-base px-1 shadow-none"
                     />
                     {fieldState.invalid && <p className="text-red-500 text-[10px] font-bold uppercase ml-1">{fieldState.error?.message}</p>}
                   </Field>
@@ -115,13 +91,12 @@ export default function SignupPage() {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid} className="space-y-1">
-                    <FieldLabel htmlFor={field.name} className="font-black text-[13px] uppercase tracking-wider text-[#1a2e2e] ml-1">Password</FieldLabel>
+                    <FieldLabel htmlFor={field.name} className="font-medium text-sm text-gray-800 ml-1">Password :</FieldLabel>
                     <Input
                       {...field}
                       id={field.name}
                       type='password'
-                      className="h-11 md:h-12 rounded-lg border-gray-100 focus:border-[#4A6B6B] focus:ring-2 focus:ring-[#4A6B6B]/5 bg-gray-50/20 transition-all font-medium text-base px-5"
-                      placeholder="••••••••"
+                      className="h-11 md:h-12 bg-transparent border-0 border-b border-gray-200 rounded-none focus:ring-0 focus:border-[#4A6B6B] transition-all font-medium text-base px-1 shadow-none"
                     />
                     {fieldState.invalid && <p className="text-red-500 text-[10px] font-bold uppercase ml-1">{fieldState.error?.message}</p>}
                   </Field>
@@ -133,13 +108,29 @@ export default function SignupPage() {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid} className="space-y-1">
-                    <FieldLabel htmlFor={field.name} className="font-black text-[13px] uppercase tracking-wider text-[#1a2e2e] ml-1">Repassword</FieldLabel>
+                    <FieldLabel htmlFor={field.name} className="font-medium text-sm text-gray-800 ml-1">Re-password :</FieldLabel>
                     <Input
                       {...field}
                       id={field.name}
                       type='password'
-                      className="h-11 md:h-12 rounded-lg border-gray-100 focus:border-[#4A6B6B] focus:ring-2 focus:ring-[#4A6B6B]/5 bg-gray-50/20 transition-all font-medium text-base px-5"
-                      placeholder="••••••••"
+                      className="h-11 md:h-12 bg-transparent border-0 border-b border-gray-200 rounded-none focus:ring-0 focus:border-[#4A6B6B] transition-all font-medium text-base px-1 shadow-none"
+                    />
+                    {fieldState.invalid && <p className="text-red-500 text-[10px] font-bold uppercase ml-1">{fieldState.error?.message}</p>}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                name="phone"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="space-y-1">
+                    <FieldLabel htmlFor={field.name} className="font-medium text-sm text-gray-800 ml-1">Phone :</FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      type='tel'
+                      className="h-11 md:h-12 bg-transparent border-0 border-b border-gray-200 rounded-none focus:ring-0 focus:border-[#4A6B6B] transition-all font-medium text-base px-1 shadow-none"
                     />
                     {fieldState.invalid && <p className="text-red-500 text-[10px] font-bold uppercase ml-1">{fieldState.error?.message}</p>}
                   </Field>
@@ -147,18 +138,12 @@ export default function SignupPage() {
               />
             </div>
 
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-1">
-              <p className="text-gray-400 font-bold text-[11px] uppercase tracking-widest pl-1">
-                Already a member?
-                <Link href="/login" className="text-[#A67B5B] font-black hover:underline ml-2">
-                  Sign In
-                </Link>
-              </p>
+            <div className="flex flex-col md:flex-row items-center justify-end gap-4 pt-2">
               <Button
-                className="w-full md:w-auto px-16 py-6 text-sm font-black bg-[#4A6B6B] hover:bg-black text-white rounded-lg shadow-lg shadow-[#4A6B6B]/10 transition-all hover:scale-[1.02] active:scale-[0.98] uppercase tracking-widest"
+                className="w-full md:w-auto px-8 py-6 text-sm font-medium text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl shadow-none transition-all hover:scale-[1.01] active:scale-[0.99]"
                 type="submit"
               >
-                Create Account <UserPlus className="ml-2 w-4 h-4" />
+                Register now
               </Button>
             </div>
 

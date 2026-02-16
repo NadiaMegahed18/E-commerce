@@ -81,7 +81,7 @@ export default function LoginPage() {
                   <Field data-invalid={fieldState.invalid} className="space-y-1">
                     <div className="flex justify-between items-end pr-1">
                       <FieldLabel htmlFor={field.name} className="font-black text-[13px] uppercase tracking-wider text-[#1a2e2e] ml-1">Password</FieldLabel>
-                      <a href="#" className="text-[10px] font-black text-[#A67B5B] hover:underline uppercase tracking-widest">Forgot?</a>
+                      <Link href="/forgot-password" className="text-[10px] font-black text-[#A67B5B] hover:underline uppercase tracking-widest">Forgot?</Link>
                     </div>
                     <Input
                       {...field}
