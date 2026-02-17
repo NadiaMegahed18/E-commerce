@@ -5,54 +5,18 @@ import Link from 'next/link'
 import Image from 'next/image'
 import AddToCartBtn from './AddToCartBtn'
 import { Star, Eye, Heart } from 'lucide-react'
-import { addToWishlist, removeFromWishlist, getWishlist } from '../../_services/_action/wishlist.action'
+import { addToWishlist, removeFromWishlist } from '../../_services/_action/wishlist.action'
 import { toast } from 'sonner'
+import { useWishlist } from '@/providers/WishlistProvider'
 
 export default function ProductCard({ item }: ProductCardPropsType) {
-  const [isInWishlist, setIsInWishlist] = useState(false)
+  const { isInWishlist: checkIsInWishlist, addToWishlistLocal, removeFromWishlistLocal, token } = useWishlist()
   const [loading, setLoading] = useState(false)
 
 
   const productId = item.id || (item as any)._id;
 
-  const getCookie = (name: string) => {
-    if (typeof window === "undefined") return "";
-    const nameEQ = name + "=";
-    const ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-    }
-    return "";
-  };
-
-  const [token, setToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    const t = getCookie("token-user");
-    setToken(t);
-  }, []);
-
-  useEffect(() => {
-    if (!token || !productId) return;
-
-    let isMounted = true;
-    async function checkWishlist() {
-      if (!token) return;
-      try {
-        const res = await getWishlist(token);
-        if (isMounted && res && res.status === "success") {
-          const exists = res.data.some((p: any) => p.id === productId || p._id === productId);
-          setIsInWishlist(exists);
-        }
-      } catch (err) {
-        console.warn("Wishlist fetch failed");
-      }
-    }
-    checkWishlist();
-    return () => { isMounted = false; };
-  }, [productId, token]);
+  const isInWishlist = checkIsInWishlist(productId);
 
   async function handleWishlistToggle(e: React.MouseEvent) {
     e.preventDefault();
@@ -66,16 +30,24 @@ export default function ProductCard({ item }: ProductCardPropsType) {
     setLoading(true);
     try {
       if (isInWishlist) {
+        removeFromWishlistLocal(productId);
         const res = await removeFromWishlist(productId, token);
         if (res && res.status === "success") {
-          setIsInWishlist(false);
           toast.success("Removed from wishlist");
+        } else {
+          // Revert if failed
+          addToWishlistLocal(productId);
+          toast.error("Failed to remove from wishlist");
         }
       } else {
+        addToWishlistLocal(productId);
         const res = await addToWishlist(productId, token);
         if (res && res.status === "success") {
-          setIsInWishlist(true);
           toast.success("Added to wishlist ❤️");
+        } else {
+          // Revert if failed
+          removeFromWishlistLocal(productId);
+          toast.error("Failed to add to wishlist");
         }
       }
     } catch (err) {

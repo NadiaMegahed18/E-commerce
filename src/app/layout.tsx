@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./_components/navbar/Navbar";
 import { Toaster } from "@/components/ui/sonner";
 import MySessionProvider from "@/providers/MySessionProvider";
+import { WishlistProvider } from "@/providers/WishlistProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,12 +28,14 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <MySessionProvider>
-          <Toaster />
-          <Navbar />
+          <WishlistProvider>
+            <Toaster />
+            <Navbar />
 
-          <div className="">
-            {children}
-          </div>
+            <div className="">
+              {children}
+            </div>
+          </WishlistProvider>
         </MySessionProvider>
       </body>
     </html>

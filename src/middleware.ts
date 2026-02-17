@@ -12,25 +12,25 @@ export default async function middleware(req: NextRequest) {
   const manualToken = req.cookies.get('token-user')?.value;
   const isAuthenticated = !!jwt || !!manualToken;
 
-  // 2. Define Auth Pages
+  // 2. Define Auth Pages and Public Pages
   const isAuthPage = pathname === '/login' || pathname === '/signup' || pathname === '/forgot-password';
+  const isPublicPage = pathname === '/' || pathname.startsWith('/products') || pathname.startsWith('/categories') || pathname.startsWith('/brands');
 
   // 3. Logic
   if (isAuthPage) {
     if (isAuthenticated) {
-      // If logged in, don't let them go to login/signup, redirect to home
       return NextResponse.redirect(new URL('/', req.url));
     }
-    // If not logged in, they CAN access auth pages
     return NextResponse.next();
   }
 
-  // 4. Protection: redirect to signup if not authenticated and trying to access a protected route
-  if (!isAuthenticated) {
-    const signupUrl = new URL('/signup', req.url);
+  // 4. Protection: redirect to login if not authenticated and trying to access a protected route
+  // If it's not a public page and not authenticated, redirect to login
+  if (!isAuthenticated && !isPublicPage) {
+    const loginUrl = new URL('/login', req.url);
     // Optional: save the current path to redirect back after login
-    // signupUrl.searchParams.set('callbackUrl', pathname);
-    return NextResponse.redirect(signupUrl);
+    // loginUrl.searchParams.set('callbackUrl', pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();

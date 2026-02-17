@@ -4,23 +4,13 @@ import { Button } from '@/components/ui/button'
 import { ShoppingCart, Loader2, Plus } from 'lucide-react'
 import { addItemToCart } from '@/app/_services/_action/addtocart.action'
 import { toast } from 'sonner'
+import { useWishlist } from '@/providers/WishlistProvider'
 
 export default function AddToCartBtn({ productId }: { productId: string }) {
+  const { token } = useWishlist()
   const [loading, setLoading] = useState(false)
 
-
-  const getCookie = (name: string) => {
-    if (typeof window === "undefined") return "";
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(';').shift() || "";
-    return "";
-  };
-
   async function addToCart() {
-
-    const token = getCookie("token-user");
-
     if (!token) {
       toast.error("Please login first");
       return;
@@ -28,9 +18,7 @@ export default function AddToCartBtn({ productId }: { productId: string }) {
 
     setLoading(true)
     try {
-
       let data = await addItemToCart(productId, token)
-
       if (data && data.status === "success") {
         toast.success("Added to cart successfully", { position: "top-center" })
       } else {
