@@ -12,7 +12,7 @@ A modern, responsive E-commerce application built with **Next.js** and **Tailwin
 ## 🛠️ Tech Stack
 * **Framework:** Next.js (App Router)
 * **Styling:** Tailwind CSS
-* **State Management:** (Context API / Redux - *ضيفي اللي استخدمتيه*)
+* **State Management:** 
 * **Deployment:** Vercel
 
 ## 🌐 Live Demo
